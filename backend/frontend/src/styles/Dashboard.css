@@ -1,0 +1,27 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .content-wrapper {
+    display: flex;
+    flex: 1;
+  }
+  
+  .main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  
+  .centered-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  /* Add any additional styles you need */
+  
+  

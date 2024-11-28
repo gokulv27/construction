@@ -1,0 +1,8 @@
+Django
+djangorestframework # For building APIs
+psycopg2-binary     # PostgreSQL support
+django-cors-headers # Handle CORS (useful for React-Django integration)
+django-environ          # Manage environment variables
+
+python-decouple
+corsheaders
