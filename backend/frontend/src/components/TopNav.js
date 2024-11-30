@@ -29,7 +29,6 @@ function TopNav({ openNewEntryModal }) {
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
-          
           </button>
         </div>
       </div>
@@ -53,7 +52,11 @@ function TopNav({ openNewEntryModal }) {
             <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </button>
-        <button className="icon-button" id="notificationButton" aria-label="Notifications">
+        <button
+          className="icon-button"
+          id="notificationButton"
+          aria-label="Notifications"
+        >
           <svg
             aria-hidden="true"
             focusable="false"
@@ -71,7 +74,11 @@ function TopNav({ openNewEntryModal }) {
             <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
           </svg>
         </button>
-        <button className="button" onClick={openNewEntryModal} id="newEntryButton">
+        <button
+          className="button"
+          id="newEntryButton"
+          onClick={openNewEntryModal}
+        >
           <svg
             aria-hidden="true"
             focusable="false"
@@ -90,7 +97,11 @@ function TopNav({ openNewEntryModal }) {
           </svg>
           New Entry
         </button>
-        <button className="icon-button" id="profileButton" aria-label="User Profile">
+        <button
+          className="icon-button"
+          id="profileButton"
+          aria-label="User Profile"
+        >
           <svg
             aria-hidden="true"
             focusable="false"

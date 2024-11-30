@@ -4,13 +4,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { fetchEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType } from '../api/employeeTypeApi';
 import { EmployeeTypeForm } from '../components/EmployeeTypeForm';
 import { EmployeeTypeTable } from '../components/EmployeeTypeTable';
-import '../styles/EmployeeTypeManagement.css'
+import '../styles/EmployeeTypeManagement.css';
 
 export const EmployeeTypeManagement = () => {
   const [employeeTypes, setEmployeeTypes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentEmployeeType, setCurrentEmployeeType] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
     loadEmployeeTypes();
@@ -64,74 +65,104 @@ export const EmployeeTypeManagement = () => {
     }
   };
 
+  const handleSelectAll = (checked) => {
+    if (checked) {
+      setSelectedIds(employeeTypes.map(et => et.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelectOne = (id, checked) => {
+    if (checked) {
+      setSelectedIds(prev => [...prev, id]);
+    } else {
+      setSelectedIds(prev => prev.filter(itemId => itemId !== id));
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    try {
+      await Promise.all(selectedIds.map(id => deleteEmployeeType(id)));
+      toast.success('Selected employee types deleted successfully');
+      loadEmployeeTypes();
+      setSelectedIds([]);
+    } catch (error) {
+      console.error('Error deleting selected employee types:', error);
+      toast.error('Failed to delete selected employee types');
+    }
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Employee Type Management</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700"
-        >
-          Add New Employee Type
-        </button>
-      </div>
+    <div className="box">
+      <div className="box-body">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">Employee Type Management</h1>
+          
+        </div>
 
-      <EmployeeTypeTable
-        employeeTypes={employeeTypes}
-        onEdit={handleEdit}
-        onDelete={(employeeType) => {
-          setCurrentEmployeeType(employeeType);
-          setIsDeleteModalOpen(true);
-        }}
-      />
-
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <h2 className="text-xl font-bold mb-4">{currentEmployeeType ? 'Edit' : 'New'} Employee Type</h2>
-            <EmployeeTypeForm
-              initialData={currentEmployeeType || undefined}
-              onSubmit={handleSubmit}
-            />
-            <button
-              onClick={() => {
-                setIsModalOpen(false);
-                setCurrentEmployeeType(null);
-              }}
-              className="mt-4 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
-            >
-              Cancel
+        {selectedIds.length > 0 && (
+          <div className="mb-4">
+            <button onClick={handleDeleteSelected} className="btn btn-danger">
+              Delete Selected ({selectedIds.length})
             </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {isDeleteModalOpen && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
-            <p>Are you sure you want to delete this employee type?</p>
-            <div className="mt-4">
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 mr-2"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
-              >
-                Cancel
-              </button>
+        <EmployeeTypeTable
+          employeeTypes={employeeTypes}
+          onEdit={handleEdit}
+          onDelete={(employeeType) => {
+            setCurrentEmployeeType(employeeType);
+            setIsDeleteModalOpen(true);
+          }}
+          onSelectAll={handleSelectAll}
+          onSelectOne={handleSelectOne}
+          selectedIds={selectedIds}
+        />
+
+        {isModalOpen && (
+          <div className="modal" style={{ display: 'block' }}>
+            <div className="modal-content">
+              <span className="close" onClick={() => setIsModalOpen(false)}>&times;</span>
+              <h2 className="text-xl font-bold mb-4">{currentEmployeeType ? 'Edit' : 'New'} Employee Type</h2>
+              <EmployeeTypeForm
+                initialData={currentEmployeeType || undefined}
+                onSubmit={handleSubmit}
+              />
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <ToastContainer />
+        {isDeleteModalOpen && (
+          <div className="modal" style={{ display: 'block' }}>
+            <div className="modal-content">
+              <span className="close" onClick={() => setIsDeleteModalOpen(false)}>&times;</span>
+              <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
+              <p>Are you sure you want to delete this employee type?</p>
+              <div className="mt-4">
+                <button
+                  onClick={handleDelete}
+                  className="btn btn-danger mr-2"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => setIsDeleteModalOpen(false)}
+                  className="btn btn-secondary"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <ToastContainer />
+      </div>
     </div>
   );
 };
 
 export default EmployeeTypeManagement;
+

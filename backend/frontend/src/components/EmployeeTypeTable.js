@@ -1,32 +1,52 @@
 import React from 'react';
-import '../styles/EmployeeTypeManagement.css'
+import '../styles/EmployeeTypeManagement.css';
 
-export const EmployeeTypeTable = ({ employeeTypes, onEdit, onDelete }) => {
+export const EmployeeTypeTable = ({ employeeTypes, onEdit, onDelete, onSelectAll, onSelectOne, selectedIds }) => {
   return (
-    <table className="min-w-full divide-y divide-gray-200">
-      <thead className="bg-gray-50">
+    <table className="table">
+      <thead>
         <tr>
-          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
-          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated At</th>
-          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created By</th>
-          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          <th>
+            <label className="checkbox-wrapper">
+              <input
+                type="checkbox"
+                onChange={(e) => onSelectAll(e.target.checked)}
+                checked={selectedIds.length === employeeTypes.length && employeeTypes.length > 0}
+              />
+              <span className="checkmark"></span>
+            </label>
+          </th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Created At</th>
+          <th>Updated At</th>
+          <th>Created By</th>
+          <th>Actions</th>
         </tr>
       </thead>
-      <tbody className="bg-white divide-y divide-gray-200">
+      <tbody>
         {employeeTypes.map((employeeType) => (
           <tr key={employeeType.id}>
-            <td className="px-6 py-4 whitespace-nowrap">{employeeType.id}</td>
-            <td className="px-6 py-4 whitespace-nowrap">{employeeType.name}</td>
-            <td className="px-6 py-4 whitespace-nowrap">{employeeType.created_at || 'N/A'}</td>
-            <td className="px-6 py-4 whitespace-nowrap">{employeeType.updated_at || 'N/A'}</td>
-            <td className="px-6 py-4 whitespace-nowrap">{employeeType.created_by || 'N/A'}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-              <button onClick={() => onEdit(employeeType)} className="text-gray-600 hover:text-gray-900 mr-2">
+            <td>
+              <label className="checkbox-wrapper">
+                <input
+                  type="checkbox"
+                  onChange={(e) => onSelectOne(employeeType.id, e.target.checked)}
+                  checked={selectedIds.includes(employeeType.id)}
+                />
+                <span className="checkmark"></span>
+              </label>
+            </td>
+            <td>{employeeType.id}</td>
+            <td>{employeeType.name}</td>
+            <td>{employeeType.created_at || 'N/A'}</td>
+            <td>{employeeType.updated_at || 'N/A'}</td>
+            <td>{employeeType.created_by || 'N/A'}</td>
+            <td>
+              <button onClick={() => onEdit(employeeType)} className="btn btn-warning btn-sm mr-2">
                 Edit
               </button>
-              <button onClick={() => onDelete(employeeType)} className="text-gray-600 hover:text-gray-900">
+              <button onClick={() => onDelete(employeeType)} className="btn btn-danger btn-sm">
                 Delete
               </button>
             </td>
