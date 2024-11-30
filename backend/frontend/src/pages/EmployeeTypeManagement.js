@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import '../styles/EmployeeTypeManagement.css';
+import { fetchEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType } from '../api/employeeTypeApi';
+import { EmployeeTypeForm } from '../components/EmployeeTypeForm';
+import { EmployeeTypeTable } from '../components/EmployeeTypeTable';
+import '../styles/EmployeeTypeManagement.css'
 
-const API_BASE_URL = 'http://localhost:8000/masters/api/employeetypes/';
-
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.xsrfCookieName = 'csrftoken';
-
-function EmployeeTypeManagement() {
+export const EmployeeTypeManagement = () => {
   const [employeeTypes, setEmployeeTypes] = useState([]);
-  const [formData, setFormData] = useState({ id: null, name: '', description: '' });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [currentEmployeeType, setCurrentEmployeeType] = useState(null);
 
   useEffect(() => {
     loadEmployeeTypes();
@@ -22,32 +18,26 @@ function EmployeeTypeManagement() {
 
   const loadEmployeeTypes = async () => {
     try {
-      const response = await axios.get(API_BASE_URL);
-      setEmployeeTypes(response.data);
+      const data = await fetchEmployeeTypes();
+      setEmployeeTypes(data);
     } catch (error) {
       console.error('Error fetching employee types:', error);
       toast.error('Failed to fetch employee types');
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (data) => {
     try {
-      if (isEditing) {
-        await axios.put(`${API_BASE_URL}${formData.id}/update/`, formData);
+      if (currentEmployeeType) {
+        await updateEmployeeType({ ...data, id: currentEmployeeType.id });
         toast.success('Employee type updated successfully');
       } else {
-        await axios.post(`${API_BASE_URL}create/`, formData);
+        await createEmployeeType(data);
         toast.success('New employee type created successfully');
       }
       loadEmployeeTypes();
       setIsModalOpen(false);
-      resetForm();
+      setCurrentEmployeeType(null);
     } catch (error) {
       console.error('Error submitting data:', error);
       toast.error('Failed to submit data');
@@ -55,149 +45,93 @@ function EmployeeTypeManagement() {
   };
 
   const handleEdit = (employeeType) => {
-    setFormData(employeeType);
-    setIsEditing(true);
+    setCurrentEmployeeType(employeeType);
     setIsModalOpen(true);
   };
 
   const handleDelete = async () => {
-    try {
-      await axios.delete(`${API_BASE_URL}${formData.id}/delete/`);
-      toast.success('Employee type deleted successfully');
-      loadEmployeeTypes();
-      setIsDeleteModalOpen(false);
-      resetForm();
-    } catch (error) {
-      console.error('Error deleting employee type:', error);
-      toast.error('Failed to delete employee type');
+    if (currentEmployeeType) {
+      try {
+        await deleteEmployeeType(currentEmployeeType.id);
+        toast.success('Employee type deleted successfully');
+        loadEmployeeTypes();
+        setIsDeleteModalOpen(false);
+        setCurrentEmployeeType(null);
+      } catch (error) {
+        console.error('Error deleting employee type:', error);
+        toast.error('Failed to delete employee type');
+      }
     }
   };
 
-  const resetForm = () => {
-    setFormData({ id: null, name: '', description: '' });
-    setIsEditing(false);
-  };
-
-  const openNewEntryModal = () => {
-    resetForm();
-    setIsModalOpen(true);
-  };
-
-  // Form Component
-  const EmployeeTypeForm = () => (
-    <form onSubmit={handleSubmit} className="form-container">
-      <div className="form-group">
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleInputChange}
-          required
-        />
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Employee Type Management</h1>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700"
+        >
+          Add New Employee Type
+        </button>
       </div>
-      <div className="form-group">
-        <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          value={formData.description}
-          onChange={handleInputChange}
-          rows="3"
-        />
-      </div>
-     
-      <button type="submit" className="btn btn-primary">
-        {isEditing ? 'Update' : 'Create'}
-      </button>
-    </form>
-  );
 
-  // Table Component
-  const EmployeeTypeTable = () => (
-    <table className="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Code</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {employeeTypes.length > 0 ? (
-          employeeTypes.map((employeeType) => (
-            <tr key={employeeType.id}>
-              <td>{employeeType.id}</td>
-              <td>{employeeType.name}</td>
-              <td>{employeeType.description}</td>
-              <td>{employeeType.code}</td>
-              <td>
-                <button onClick={() => handleEdit(employeeType)} className="btn btn-warning btn-sm">
-                  Edit
-                </button>
-                <button onClick={() => {
-                  setFormData(employeeType);
-                  setIsDeleteModalOpen(true);
-                }} className="btn btn-danger btn-sm">
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td colSpan="5" className="text-center">
-              No employee types available.
-            </td>
-          </tr>
-        )}
-      </tbody>
-    </table>
-  );
+      <EmployeeTypeTable
+        employeeTypes={employeeTypes}
+        onEdit={handleEdit}
+        onDelete={(employeeType) => {
+          setCurrentEmployeeType(employeeType);
+          setIsDeleteModalOpen(true);
+        }}
+      />
 
-  // Modal Component
-  const Modal = ({ isOpen, onClose, title, children }) => {
-    if (!isOpen) return null;
-
-    return (
-      <div className="modal-overlay">
-        <div className="modal">
-          <div className="modal-header">
-            <h2>{title}</h2>
-            <button onClick={onClose} className="close-btn">&times;</button>
-          </div>
-          <div className="modal-content">
-            {children}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <h2 className="text-xl font-bold mb-4">{currentEmployeeType ? 'Edit' : 'New'} Employee Type</h2>
+            <EmployeeTypeForm
+              initialData={currentEmployeeType || undefined}
+              onSubmit={handleSubmit}
+            />
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+                setCurrentEmployeeType(null);
+              }}
+              className="mt-4 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+            >
+              Cancel
+            </button>
           </div>
         </div>
-      </div>
-    );
-  };
+      )}
 
-  return (
-    <div className="employee-type-management">
-      <h1>Employee Type Management</h1>
-     
-
-      <EmployeeTypeTable />
-
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={isEditing ? "Edit Employee Type" : "New Employee Type"}>
-        <EmployeeTypeForm />
-      </Modal>
-
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Confirm Deletion">
-        <p>Are you sure you want to delete this employee type?</p>
-        <button onClick={handleDelete} className="btn btn-danger">Delete</button>
-        <button onClick={() => setIsDeleteModalOpen(false)} className="btn btn-secondary">Cancel</button>
-      </Modal>
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
+            <p>Are you sure you want to delete this employee type?</p>
+            <div className="mt-4">
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 mr-2"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <ToastContainer />
     </div>
   );
-}
+};
 
 export default EmployeeTypeManagement;
-
