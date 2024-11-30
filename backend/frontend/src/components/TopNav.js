@@ -1,18 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../App.css';
 
-function TopNav({ openNewEntryModal }) {
+function TopNav({ openNewEntryModal, onSearch }) {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    onSearch(searchTerm);
+  };
+
   return (
     <header className="main-header">
       <div className="header-center">
-        <div className="search-container">
+        <form onSubmit={handleSearchSubmit} className="search-container">
           <input
             type="search"
             id="search"
             placeholder="Search Files..."
             className="search-input"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            aria-label="Search files"
           />
-          <button type="button" className="search-button">
+          <button type="submit" className="search-button" aria-label="Submit search">
             <svg
               aria-hidden="true"
               focusable="false"
@@ -30,7 +44,7 @@ function TopNav({ openNewEntryModal }) {
               <path d="m21 21-4.3-4.3" />
             </svg>
           </button>
-        </div>
+        </form>
       </div>
       <div className="header-right">
         <button className="icon-button" id="filterButton" aria-label="Filter">

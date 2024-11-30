@@ -1,54 +1,32 @@
+
+
+
+/* TopNav styles */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--background-color);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1000px;
+  padding: 0 2rem;
+  height: var(--topnav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 999;
+}
+
+
+
+
+/* The rest of your CSS remains the same */
+
 .box-body {
   padding: 1rem;
 }
-
-.custom-dropdown-toggle {
-  background: #0f172a;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-menu a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-menu a:hover {
-  background-color: #f1f1f1;
-}
-
-.dropdown-menu.show {
-  display: block;
-}
-
-.dropdown-menu li a {
-  padding: 0.5rem 1rem;
-  display: block;
-  color: #333;
-  text-decoration: none;
-}
-
-.dropdown-menu li a:hover {
-  background: #f8f9fa;
-}
-
 .table {
   width: 100%;
   border-collapse: separate;
@@ -181,6 +159,7 @@
 }
 
 .box {
+  margin-top: 2rem;
   background: white;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -192,6 +171,7 @@
   display: inline-block;
   position: relative;
   padding-left: 25px;
+  padding-bottom: 10px;
   cursor: pointer;
   font-size: 16px;
   user-select: none;
@@ -242,4 +222,3 @@
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
-

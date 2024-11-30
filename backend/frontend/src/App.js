@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
-import TopNav from './components/TopNav';
 import Dashboard from './pages/Dashboard';
 import EmployeeTypeManagement from './pages/EmployeeTypeManagement';
 import './App.css';
@@ -14,7 +13,7 @@ function App() {
     <Router>
       <div className="app">
         {/* Pass modal handler to TopNav */}
-        <TopNav onNewEntryClick={() => setIsModalOpen(true)} />
+       
         <div className="content-wrapper">
           <Sidebar />
           <main className="main-content">

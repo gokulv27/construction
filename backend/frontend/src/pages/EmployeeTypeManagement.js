@@ -1,26 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { fetchEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType } from '../api/employeeTypeApi';
 import { EmployeeTypeForm } from '../components/EmployeeTypeForm';
 import { EmployeeTypeTable } from '../components/EmployeeTypeTable';
 import '../styles/EmployeeTypeManagement.css';
+import TopNav from '../components/TopNav';
 
 export const EmployeeTypeManagement = () => {
   const [employeeTypes, setEmployeeTypes] = useState([]);
+  const [filteredEmployeeTypes, setFilteredEmployeeTypes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentEmployeeType, setCurrentEmployeeType] = useState(null);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadEmployeeTypes();
   }, []);
 
+  useEffect(() => {
+    const filtered = employeeTypes.filter(et => 
+      et.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredEmployeeTypes(filtered);
+  }, [searchTerm, employeeTypes]);
+
   const loadEmployeeTypes = async () => {
     try {
       const data = await fetchEmployeeTypes();
       setEmployeeTypes(data);
+      setFilteredEmployeeTypes(data);
     } catch (error) {
       console.error('Error fetching employee types:', error);
       toast.error('Failed to fetch employee types');
@@ -67,7 +78,7 @@ export const EmployeeTypeManagement = () => {
 
   const handleSelectAll = (checked) => {
     if (checked) {
-      setSelectedIds(employeeTypes.map(et => et.id));
+      setSelectedIds(filteredEmployeeTypes.map(et => et.id));
     } else {
       setSelectedIds([]);
     }
@@ -93,13 +104,24 @@ export const EmployeeTypeManagement = () => {
     }
   };
 
+  const openNewEntryModal = useCallback(() => {
+    setCurrentEmployeeType(null);
+    setIsModalOpen(true);
+  }, []);
+
+  const handleSearch = useCallback((term) => {
+    setSearchTerm(term);
+  }, []);
+
   return (
+    <>
+      <TopNav openNewEntryModal={openNewEntryModal} onSearch={handleSearch} />
     <div className="box">
       <div className="box-body">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Employee Type Management</h1>
-          
         </div>
+        
 
         {selectedIds.length > 0 && (
           <div className="mb-4">
@@ -110,7 +132,7 @@ export const EmployeeTypeManagement = () => {
         )}
 
         <EmployeeTypeTable
-          employeeTypes={employeeTypes}
+          employeeTypes={filteredEmployeeTypes}
           onEdit={handleEdit}
           onDelete={(employeeType) => {
             setCurrentEmployeeType(employeeType);
@@ -161,8 +183,8 @@ export const EmployeeTypeManagement = () => {
         <ToastContainer />
       </div>
     </div>
+    </>
   );
 };
 
 export default EmployeeTypeManagement;
-

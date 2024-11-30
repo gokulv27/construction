@@ -25,3 +25,4 @@ export const EmployeeTypeForm = ({ initialData, onSubmit }) => {
     </form>
   );
 };
+
