@@ -1,7 +1,7 @@
 import React from 'react';
-import '../styles/MasterPageManagement.css';
+import '../styles/MasterPageManagement.css'; // Updated CSS import
 
-export const EmployeeTypeTable = ({ employeeTypes, onEdit, onDelete, onSelectAll, onSelectOne, selectedIds }) => {
+export const VendorTypeTable = ({ vendorTypes, onEdit, onDelete, onSelectAll, onSelectOne, selectedIds }) => {
   return (
     <table className="table">
       <thead>
@@ -11,7 +11,7 @@ export const EmployeeTypeTable = ({ employeeTypes, onEdit, onDelete, onSelectAll
               <input
                 type="checkbox"
                 onChange={(e) => onSelectAll(e.target.checked)}
-                checked={selectedIds.length === employeeTypes.length && employeeTypes.length > 0}
+                checked={selectedIds.length === vendorTypes.length && vendorTypes.length > 0}
               />
               <span className="checkmark"></span>
             </label>
@@ -25,28 +25,28 @@ export const EmployeeTypeTable = ({ employeeTypes, onEdit, onDelete, onSelectAll
         </tr>
       </thead>
       <tbody>
-        {employeeTypes.map((employeeType) => (
-          <tr key={employeeType.id}>
+        {vendorTypes.map((vendorType) => (
+          <tr key={vendorType.id}>
             <td>
               <label className="checkbox-wrapper">
                 <input
                   type="checkbox"
-                  onChange={(e) => onSelectOne(employeeType.id, e.target.checked)}
-                  checked={selectedIds.includes(employeeType.id)}
+                  onChange={(e) => onSelectOne(vendorType.id, e.target.checked)}
+                  checked={selectedIds.includes(vendorType.id)}
                 />
                 <span className="checkmark"></span>
               </label>
             </td>
-            <td>{employeeType.id}</td>
-            <td>{employeeType.name}</td>
-            <td>{employeeType.created_at || 'N/A'}</td>
-            <td>{employeeType.updated_at || 'N/A'}</td>
-            <td>{employeeType.created_by || 'N/A'}</td>
+            <td>{vendorType.id}</td>
+            <td>{vendorType.name}</td>
+            <td>{vendorType.created_at || 'N/A'}</td>
+            <td>{vendorType.updated_at || 'N/A'}</td>
+            <td>{vendorType.created_by || 'N/A'}</td>
             <td>
-              <button onClick={() => onEdit(employeeType)} className="btn btn-warning btn-sm mr-2">
+              <button onClick={() => onEdit(vendorType)} className="btn btn-warning btn-sm mr-2">
                 Edit
               </button>
-              <button onClick={() => onDelete(employeeType)} className="btn btn-danger btn-sm">
+              <button onClick={() => onDelete(vendorType)} className="btn btn-danger btn-sm">
                 Delete
               </button>
             </td>
@@ -56,4 +56,3 @@ export const EmployeeTypeTable = ({ employeeTypes, onEdit, onDelete, onSelectAll
     </table>
   );
 };
-

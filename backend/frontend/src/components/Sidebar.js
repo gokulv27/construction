@@ -38,10 +38,8 @@ const Sidebar = () => {
           </div>
           <div className="dropdown-content">
             <NavLink to="/masters/employee-type" className={({ isActive }) => isActive ? 'active' : ''}>Employee Type</NavLink>
-            <NavLink to="/masters/vendor-type" className={({ isActive }) => isActive ? 'active' : ''}>Vendor Type</NavLink>
-            <NavLink to="/masters/brand-type" className={({ isActive }) => isActive ? 'active' : ''}>Brand</NavLink>
-            <NavLink to="/masters/employee-roles" className={({ isActive }) => isActive ? 'active' : ''}>Employee Role</NavLink>
-            <NavLink to="/masters/item-list" className={({ isActive }) => isActive ? 'active' : ''}>Item List</NavLink>
+            <NavLink to="/masters/document-type" className={({ isActive }) => isActive ? 'active' : ''}>Document Type</NavLink>
+            <NavLink to="/masters/vendor-types" className={({ isActive }) => isActive ? 'active' : ''}> Vendor Type</NavLink>
           </div>
         </div>
         <NavLink to="/client" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>

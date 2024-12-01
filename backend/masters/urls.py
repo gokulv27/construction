@@ -3,9 +3,22 @@ from . import views
 
 urlpatterns = [
     path('api/employee-types/', views.employee_type_list, name='employee_type_list'),
+    path('api/document-types/', views.document_type_list, name='document_type_list'),
+    
     path('api/employee-types/create/', views.employee_type_create, name='employee_type_create'),
     path('api/employee-types/update/<int:id>/', views.employee_type_update, name='employee_type_update'),
     path('api/employee-types/delete/<int:id>/', views.employee_type_delete, name='employee_type_delete'),
+
+
+    
+    path('api/document-types/create/', views.document_type_create, name='document_type_create'),
+    path('api/document-types/update/<int:id>/', views.document_type_update, name='document_type_update'),
+    path('api/document-types/delete/<int:id>/', views.document_type_delete, name='document_type_delete'),
+
+    path('api/vendor-types/', views.vendor_type_list, name='vendor_type_list'),            # GET: List all vendor types
+    path('api/vendor-types/create/', views.vendor_type_create, name='vendor_type_create'), # POST: Create a vendor type
+    path('api/vendor-types/<int:id>/update/', views.vendor_type_update, name='vendor_type_update'), # PUT: Update a vendor type
+    path('api/vendor-types/<int:id>/delete/', views.vendor_type_delete, name='vendor_type_delete'), # DELETE: Delete a vendor type
 ]
     
     #  path('vendor_types/', views.vendor_type_list, name='vendor_type_list'),

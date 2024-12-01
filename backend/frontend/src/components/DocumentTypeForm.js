@@ -1,8 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import '../styles/MasterPageManagement.css';
+import '../styles/MasterPageManagement.css'; // Updated CSS import
 
-export const EmployeeTypeForm = ({ initialData, onSubmit }) => {
+export const DocumentTypeForm = ({ initialData, onSubmit }) => {
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: initialData,
   });
@@ -25,4 +25,3 @@ export const EmployeeTypeForm = ({ initialData, onSubmit }) => {
     </form>
   );
 };
-

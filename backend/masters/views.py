@@ -2,8 +2,8 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import EmployeeType 
-from .forms import EmployeeType
+from .models import EmployeeType,DocumentType,VendorType
+from .forms import EmployeeType,DocumentType,VendorType
 from django import forms
 from rest_framework.response import Response
 from rest_framework import status
@@ -79,48 +79,137 @@ def employee_type_delete(request, id):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-# # Vendor Type List View
-# @require_http_methods(["GET"])
-# def vendor_type_list(request):
-#     vendor_types = vendortype.objects.all()
-#     return render(request, 'masters/vendor_type_list.html', {'vendor_types': vendor_types})
+# GET: List all document types
+def document_type_list(request):
+    if request.method == 'GET':
+        document_types = DocumentType.objects.all()
+        data = [
+            {
+                'id': dt.id,
+                'name': dt.name,
+                'created_at': dt.created_at,
+                'updated_at': dt.updated_at
+            }
+            for dt in document_types
+        ]
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'error': 'Invalid Request'}, status=400)
 
-# # Vendor Type Create View
-# @require_http_methods(["POST"])
-# def vendor_type_create(request):
-#     name = request.POST.get('name', '').strip()  # Remove whitespace
-#     if not name:
-#         return JsonResponse({'error': 'Name cannot be empty.'}, status=400)
-#     vendor_type = vendortype.objects.create(name=name)
-#     return JsonResponse({
-#         'id': vendor_type.id,
-#         'name': vendor_type.name,
-#         'created_at': vendor_type.created_at,
-#         'updated_at': vendor_type.updated_at
-#     })
+# POST: Create a new document type
+@api_view(['POST'])
+def document_type_create(request):
+    name = request.data.get('name', '').strip()
 
-# # Vendor Type Update View
-# @require_http_methods(["POST"])
-# def vendor_type_update(request, id):
-#     vendor_type = get_object_or_404(vendortype, id=id)
-#     name = request.POST.get('name', '').strip()
-#     if not name:
-#         return JsonResponse({'error': 'Name cannot be empty.'}, status=400)
-#     vendor_type.name = name
-#     vendor_type.save()
-#     return JsonResponse({
-#         'id': vendor_type.id,
-#         'name': vendor_type.name,
-#         'created_at': vendor_type.created_at,
-#         'updated_at': vendor_type.updated_at
-#     })
+    if not name:
+        return Response({'error': 'Name cannot be empty.'}, status=status.HTTP_400_BAD_REQUEST)
 
-# # Vendor Type Delete View
-# @require_http_methods(["POST"])
-# def vendor_type_delete(request, id):
-#     vendor_type = get_object_or_404(vendortype, id=id)
-#     vendor_type.delete()
-#     return JsonResponse({'success': True})
+    document_type = DocumentType.objects.create(name=name)
+    return Response({
+        'id': document_type.id,
+        'name': document_type.name,
+        'created_at': document_type.created_at,
+        'updated_at': document_type.updated_at
+    }, status=status.HTTP_201_CREATED)
+
+# PUT: Update an existing document type
+@api_view(['PUT'])
+def document_type_update(request, id):
+    try:
+        document_type = DocumentType.objects.get(id=id)
+    except DocumentType.DoesNotExist:
+        return Response({'error': 'Document type not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    name = request.data.get('name', '').strip()
+
+    if not name:
+        return Response({'error': 'Name cannot be empty.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    document_type.name = name
+    document_type.save()
+
+    return Response({
+        'id': document_type.id,
+        'name': document_type.name,
+        'created_at': document_type.created_at,
+        'updated_at': document_type.updated_at
+    }, status=status.HTTP_200_OK)
+
+# DELETE: Delete a document type
+@csrf_exempt  # Only for development if CSRF issues arise
+@require_http_methods(["DELETE"])
+def document_type_delete(request, id):
+    try:
+        document_type = get_object_or_404(DocumentType, id=id)
+        document_type.delete()
+        return JsonResponse({'success': True}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+# GET: List all vendor types
+def vendor_type_list(request):
+    if request.method == 'GET':
+        vendor_types = VendorType.objects.all()
+        data = [
+            {
+                'id': vt.id,
+                'name': vt.name,
+                'created_at': vt.created_at,
+                'updated_at': vt.updated_at
+            }
+            for vt in vendor_types
+        ]
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'error': 'Invalid Request'}, status=400)
+
+# POST: Create a new vendor type
+@api_view(['POST'])
+def vendor_type_create(request):
+    name = request.data.get('name', '').strip()
+
+    if not name:
+        return Response({'error': 'Name cannot be empty.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    vendor_type = VendorType.objects.create(name=name)
+    return Response({
+        'id': vendor_type.id,
+        'name': vendor_type.name,
+        'created_at': vendor_type.created_at,
+        'updated_at': vendor_type.updated_at
+    }, status=status.HTTP_201_CREATED)
+
+# PUT: Update an existing vendor type
+@api_view(['PUT'])
+def vendor_type_update(request, id):
+    try:
+        vendor_type = VendorType.objects.get(id=id)
+    except VendorType.DoesNotExist:
+        return Response({'error': 'Vendor type not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    name = request.data.get('name', '').strip()
+
+    if not name:
+        return Response({'error': 'Name cannot be empty.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    vendor_type.name = name
+    vendor_type.save()
+
+    return Response({
+        'id': vendor_type.id,
+        'name': vendor_type.name,
+        'created_at': vendor_type.created_at,
+        'updated_at': vendor_type.updated_at
+    }, status=status.HTTP_200_OK)
+
+# DELETE: Delete a vendor type
+@csrf_exempt  # Only for development if CSRF issues arise
+@require_http_methods(["DELETE"])
+def vendor_type_delete(request, id):
+    try:
+        vendor_type = get_object_or_404(VendorType, id=id)
+        vendor_type.delete()
+        return JsonResponse({'success': True}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 # # Brand Type Views
 

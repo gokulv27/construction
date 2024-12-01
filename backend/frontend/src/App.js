@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import EmployeeTypeManagement from './pages/EmployeeTypeManagement';
+import DocumentTypeManagement from './pages/DocumentTypeManagement';
+import  VendorTypesManagement from './pages/VendorTypesManagement';
+
 import './App.css';
 
 function App() {
@@ -12,12 +15,12 @@ function App() {
   return (
     <Router>
       <div className="app">
-        {/* Pass modal handler to TopNav */}
-       
+        {/* Sidebar and main content */}
         <div className="content-wrapper">
           <Sidebar />
           <main className="main-content">
             <div className="centered-container">
+              {/* All Routes must be inside this <Routes> component */}
               <Routes>
                 {/* Dashboard route */}
                 <Route path="/" element={<Dashboard />} />
@@ -27,6 +30,27 @@ function App() {
                   path="/masters/employee-type"
                   element={
                     <EmployeeTypeManagement
+                      isModalOpen={isModalOpen}
+                      setIsModalOpen={setIsModalOpen}
+                    />
+                  }
+                />
+
+                {/* Document Type Management route */}
+                <Route
+                  path="/masters/document-type"
+                  element={
+                    <DocumentTypeManagement
+                      isModalOpen={isModalOpen}
+                      setIsModalOpen={setIsModalOpen}
+                    />
+                  }
+                />
+                 {/* Document Type Management route */}
+                 <Route
+                  path="/masters/vendor-types"
+                  element={
+                    <VendorTypesManagement
                       isModalOpen={isModalOpen}
                       setIsModalOpen={setIsModalOpen}
                     />

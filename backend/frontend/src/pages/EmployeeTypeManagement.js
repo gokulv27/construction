@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { fetchEmployeeTypes, createEmployeeType, updateEmployeeType, deleteEmployeeType } from '../api/employeeTypeApi';
 import { EmployeeTypeForm } from '../components/EmployeeTypeForm';
 import { EmployeeTypeTable } from '../components/EmployeeTypeTable';
-import '../styles/EmployeeTypeManagement.css';
+import '../styles/MasterPageManagement.css';
 import TopNav from '../components/TopNav';
 
 const EmployeeTypeManagement = () => {

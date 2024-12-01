@@ -1,16 +1,22 @@
 # masters/forms.py
 from django import forms
-from .models import EmployeeType
+from .models import EmployeeType,DocumentType,VendorType
 
 class EmployeeTypeForm(forms.ModelForm):
     class Meta:
         model = EmployeeType
         fields = ['name']
 
-# class vendortypeForm(forms.ModelForm):
-#     class Meta:
-#         model = vendortype
-#         fields = ['name']
+class DocumentTypeForm(forms.ModelForm):
+    class Meta:
+        model = DocumentType
+        fields = ['name']
+
+
+class VendortypeForm(forms.ModelForm):
+    class Meta:
+        model = VendorType
+        fields = ['name']
 
 # class BrandTypeForm(forms.ModelForm):
 #     class Meta:
