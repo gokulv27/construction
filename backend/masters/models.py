@@ -1,31 +1,45 @@
+# masters/models.py
 from django.db import models
 
 class EmployeeType(models.Model):
-    # Define available employee types as choices
-    EMPLOYEE_TYPE_CHOICES = [
-        ('Admin', 'Admin'),
-        ('Site Supervisor', 'Site Supervisor'),
-        ('Engineer', 'Engineer'),
-        ('Manager', 'Manager'),
-        ('Technician', 'Technician'),
-    ]
-
-    name = models.CharField(
-        max_length=255,
-        choices=EMPLOYEE_TYPE_CHOICES,  # Restrict to defined choices
-        unique=True  # Ensure each type is only listed once
-    )
-    description = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.CharField(max_length=255, blank=True, null=True)
-    updated_by = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        ordering = ['-created_at']
-        verbose_name = "Employee Type"
-        verbose_name_plural = "Employee Types"
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
+
+# class BrandType(models.Model):
+#     name = models.CharField(max_length=255)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return self.name
+    
+# class EmployeeRolles(models.Model):
+#     name = models.CharField(max_length=255)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return self.name
+# class vendortype(models.Model):
+#     name = models.CharField(max_length=255)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return self.name
+# class Item(models.Model):  # Class names should follow PascalCase convention
+#     name = models.CharField(max_length=255)
+#     brand = models.ForeignKey(  # Assuming `BrandType` is another model
+#         BrandType, on_delete=models.CASCADE, related_name='items'  # Use plural for related_name
+#     )
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         # Check if brand exists to avoid potential issues when a related object is deleted
+#         return f"{self.name} ({self.brand.name})" if self.brand else self.name
