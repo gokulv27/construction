@@ -4,28 +4,24 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import EmployeeTypeManagement from './pages/EmployeeTypeManagement';
 import DocumentTypeManagement from './pages/DocumentTypeManagement';
-import  VendorTypesManagement from './pages/VendorTypesManagement';
+import VendorTypesManagement from './pages/VendorTypesManagement';
+import UserManagement from './pages/userManagement'; // Import UserManagement
 
 import './App.css';
 
 function App() {
-  // Modal state to control visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <Router>
       <div className="app">
-        {/* Sidebar and main content */}
         <div className="content-wrapper">
           <Sidebar />
           <main className="main-content">
             <div className="centered-container">
-              {/* All Routes must be inside this <Routes> component */}
               <Routes>
-                {/* Dashboard route */}
                 <Route path="/" element={<Dashboard />} />
 
-                {/* Employee Type Management route */}
                 <Route
                   path="/masters/employee-type"
                   element={
@@ -36,7 +32,6 @@ function App() {
                   }
                 />
 
-                {/* Document Type Management route */}
                 <Route
                   path="/masters/document-type"
                   element={
@@ -46,11 +41,22 @@ function App() {
                     />
                   }
                 />
-                 {/* Document Type Management route */}
-                 <Route
+
+                <Route
                   path="/masters/vendor-types"
                   element={
                     <VendorTypesManagement
+                      isModalOpen={isModalOpen}
+                      setIsModalOpen={setIsModalOpen}
+                    />
+                  }
+                />
+
+                {/* User Management route */}
+                <Route
+                  path="/masters/user-management"
+                  element={
+                    <UserManagement
                       isModalOpen={isModalOpen}
                       setIsModalOpen={setIsModalOpen}
                     />

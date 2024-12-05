@@ -25,6 +25,15 @@ INSTALLED_APPS = [
     'corsheaders',  # Enable CORS headers
     'rest_framework',
     'masters',
+    'authentication',
+]
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',  # Use bcrypt as the default hasher
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.ScryptPasswordHasher',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +86,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -85,6 +95,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+
+APPEND_SLASH = False
+
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -96,9 +111,12 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "frontend" / "build" / "static"]  # React static files
 STATIC_ROOT = BASE_DIR / "staticfiles"  # Collected static files for production
+
+# STATICFILES_DIRS is removed because there is no 'frontend/build/static' directory.
+
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -111,9 +129,9 @@ CORS_ALLOWED_ORIGINS = [
 
 # CSRF Configuration for trusted origins
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React development server
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # React development server
+# ]
 # Production Security Settings
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
