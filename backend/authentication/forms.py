@@ -7,7 +7,7 @@ class CustomUserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'role', 'password']
+        fields = ['username',  'phone', 'role', 'password']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -20,4 +20,4 @@ class CustomUserCreationForm(forms.ModelForm):
 class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'role', 'is_active']
+        fields = ['username', 'phone', 'role', 'is_active']

@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'masters',
     'authentication',
+    'labour_management',
 ]
 
 PASSWORD_HASHERS = [
@@ -37,7 +38,7 @@ PASSWORD_HASHERS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # CORS middleware must come first
+    'corsheaders.middleware.CorsMiddleware',  # Ensure this is first
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -120,15 +121,25 @@ STATIC_ROOT = BASE_DIR / "staticfiles"  # Collected static files for production
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+CORS_ALLOW_CREDENTIALS = True
 # CORS Configuration
+CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React development server
+    "http://localhost:3000",  # React development server (if used)
     "http://127.0.0.1:8000",  # Django development server
+    "http://10.0.2.2:8000",   # Flutter emulator
+    "http://10.0.2.2:8001",   # Additional Flutter emulator port
 ]
 
-# CSRF Configuration for trusted origins
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+    "http://10.0.2.2:8000",   # Flutter emulator
+    "http://10.0.2.2:8001",   # Additional Flutter emulator port
+]
+
+
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:3000",  # React development server
 # ]

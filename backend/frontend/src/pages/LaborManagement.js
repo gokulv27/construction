@@ -1,86 +1,86 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { fetchUsers, createUser, updateUser, deleteUser } from '../api/userApi';
-import { AddUserForm } from '../components/authentication/UserForm';
-import { UserTable } from '../components/authentication/UserTable';
+import { fetchLabors, createLabor, updateLabor, deleteLabor } from '../api/laborApi';
+import { LaborForm } from '../components/LaborForm';
+import { LaborTable } from '../components/LaborTable';
 import '../styles/MasterPageManagement.css';
 import TopNav from '../components/TopNav';
-import { useNavigate } from 'react-router-dom'; // Use React Router for navigation
 
-const UserManagement = () => {
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
+const LaborManagement = () => {
+  const [labors, setLabors] = useState([]);
+  const [filteredLabors, setFilteredLabors] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentLabor, setCurrentLabor] = useState(null);
   const [selectedIds, setSelectedIds] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
-    loadUsers();
+    loadLabors();
   }, []);
 
   useEffect(() => {
-    const filtered = users.filter(user =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filtered = labors.filter(labor => 
+      labor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      labor.phone_no.includes(searchTerm) ||
+      labor.aadhar_no.includes(searchTerm)
     );
-    setFilteredUsers(filtered);
-  }, [searchTerm, users]);
+    setFilteredLabors(filtered);
+  }, [searchTerm, labors]);
 
-  const loadUsers = async () => {
+  const loadLabors = async () => {
     try {
-      const data = await fetchUsers();
-      setUsers(data);
-      setFilteredUsers(data);
+      const data = await fetchLabors();
+      setLabors(data);
+      setFilteredLabors(data);
     } catch (error) {
-      console.error('Error fetching users:', error);
-      toast.error('Failed to fetch users');
+      console.error('Error fetching labors:', error);
+      toast.error('Failed to fetch labors');
     }
   };
 
   const handleSubmit = async (data) => {
     try {
-      if (currentUser) {
-        await updateUser({ ...data, id: currentUser.id });
-        toast.success('User updated successfully');
+      if (currentLabor) {
+        await updateLabor({ ...data, id: currentLabor.id });
+        toast.success('Labor updated successfully');
       } else {
-        await createUser(data);
-        toast.success('New user created successfully');
+        await createLabor(data);
+        toast.success('New labor created successfully');
       }
-      loadUsers();
+      loadLabors();
       setIsModalOpen(false);
-      setCurrentUser(null);
+      setCurrentLabor(null);
     } catch (error) {
       console.error('Error submitting data:', error);
       toast.error('Failed to submit data');
     }
   };
 
-  const handleEdit = (user) => {
-    setCurrentUser(user);
+  const handleEdit = (labor) => {
+    setCurrentLabor(labor);
     setIsModalOpen(true);
   };
 
   const handleDelete = async () => {
-    if (currentUser) {
+    if (currentLabor) {
       try {
-        await deleteUser(currentUser.id);
-        toast.success('User deleted successfully');
-        loadUsers();
+        await deleteLabor(currentLabor.id);
+        toast.success('Labor deleted successfully');
+        loadLabors();
         setIsDeleteModalOpen(false);
-        setCurrentUser(null);
+        setCurrentLabor(null);
       } catch (error) {
-        console.error('Error deleting user:', error);
-        toast.error('Failed to delete user');
+        console.error('Error deleting labor:', error);
+        toast.error('Failed to delete labor');
       }
     }
   };
 
   const handleSelectAll = (checked) => {
     if (checked) {
-      setSelectedIds(filteredUsers.map(user => user.id));
+      setSelectedIds(filteredLabors.map(labor => labor.id));
     } else {
       setSelectedIds([]);
     }
@@ -96,19 +96,20 @@ const UserManagement = () => {
 
   const handleDeleteSelected = async () => {
     try {
-      await Promise.all(selectedIds.map(id => deleteUser(id)));
-      toast.success('Selected users deleted successfully');
-      loadUsers();
+      await Promise.all(selectedIds.map(id => deleteLabor(id)));
+      toast.success('Selected labors deleted successfully');
+      loadLabors();
       setSelectedIds([]);
     } catch (error) {
-      console.error('Error deleting selected users:', error);
-      toast.error('Failed to delete selected users');
+      console.error('Error deleting selected labors:', error);
+      toast.error('Failed to delete selected labors');
     }
   };
 
   const openNewEntryModal = useCallback(() => {
-    navigate('/add-user'); // Use navigate for routing
-  }, [navigate]);
+    setCurrentLabor(null);
+    setIsModalOpen(true);
+  }, []);
 
   const handleSearch = useCallback((term) => {
     setSearchTerm(term);
@@ -120,8 +121,12 @@ const UserManagement = () => {
       <div className="box">
         <div className="box-body">
           <div className="header-container">
-            <h1 className="header-title">User Management</h1>
-            <button className="button" id="newEntryButton" onClick={openNewEntryModal}>
+            <h1 className="header-title">Labor Management</h1>
+            <button
+              className="button"
+              id="newEntryButton"
+              onClick={openNewEntryModal}
+            >
               <svg
                 aria-hidden="true"
                 focusable="false"
@@ -138,7 +143,7 @@ const UserManagement = () => {
                 <path d="M5 12h14" />
                 <path d="M12 5v14" />
               </svg>
-              New User
+              New Entry
             </button>
           </div>
 
@@ -150,11 +155,11 @@ const UserManagement = () => {
             </div>
           )}
 
-          <UserTable
-            users={filteredUsers}
+          <LaborTable
+            labors={filteredLabors}
             onEdit={handleEdit}
-            onDelete={(user) => {
-              setCurrentUser(user);
+            onDelete={(labor) => {
+              setCurrentLabor(labor);
               setIsDeleteModalOpen(true);
             }}
             onSelectAll={handleSelectAll}
@@ -166,8 +171,11 @@ const UserManagement = () => {
             <div className="modal">
               <div className="modal-content">
                 <span className="close" onClick={() => setIsModalOpen(false)}>&times;</span>
-                <h2 className="modal-title">{currentUser ? 'Edit' : 'New'} User</h2>
-                <AddUserForm initialData={currentUser || undefined} onSubmit={handleSubmit} />
+                <h2 className="modal-title">{currentLabor ? 'Edit' : 'New'} Labor</h2>
+                <LaborForm
+                  initialData={currentLabor || {}}
+                  onSubmit={handleSubmit}
+                />
               </div>
             </div>
           )}
@@ -177,10 +185,20 @@ const UserManagement = () => {
               <div className="modal-content">
                 <span className="close" onClick={() => setIsDeleteModalOpen(false)}>&times;</span>
                 <h2 className="modal-title">Confirm Deletion</h2>
-                <p>Are you sure you want to delete this user?</p>
+                <p>Are you sure you want to delete this labor?</p>
                 <div className="modal-actions">
-                  <button onClick={handleDelete} className="btn btn-danger">Delete</button>
-                  <button onClick={() => setIsDeleteModalOpen(false)} className="btn btn-secondary">Cancel</button>
+                  <button
+                    onClick={handleDelete}
+                    className="btn btn-danger"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => setIsDeleteModalOpen(false)}
+                    className="btn btn-secondary"
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>
@@ -193,4 +211,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default LaborManagement;
