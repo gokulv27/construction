@@ -1,21 +1,18 @@
 from django.contrib import admin
-from .models import  LaborManagement
-
-
-
+from .models import LaborManagement
 
 @admin.register(LaborManagement)
 class LaborManagementAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'name', 'phone_no', 'aadhar_no', 'city', 'state', 'pincode', 
-        'daily_wages', 'created_at', 'updated_at'
-    )  # Removed 'document_type'
-    list_filter = ('city', 'state')  # Removed 'document_type'
-    search_fields = ('name', 'phone_no', 'aadhar_no', 'city', 'state')
+        'daily_wages', 'skill', 'created_at', 'updated_at'
+    )
+    list_filter = ('city', 'state', 'skill')
+    search_fields = ('name', 'phone_no', 'aadhar_no', 'city', 'state', 'skill__name')
     ordering = ('-created_at',)
     fieldsets = (
         ("Basic Information", {
-            'fields': ('name', 'phone_no', 'aadhar_no', 'emergency_contact_number')
+            'fields': ('name', 'phone_no', 'aadhar_no', 'emergency_contact_number', 'skill')
         }),
         ("Address", {
             'fields': ('address', 'city', 'state', 'pincode')
@@ -26,6 +23,5 @@ class LaborManagementAdmin(admin.ModelAdmin):
         ("Timestamps", {
             'fields': ('created_at', 'updated_at')
         }),
-    )  # Removed 'document_type' here
+    )
     readonly_fields = ('created_at', 'updated_at')
-

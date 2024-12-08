@@ -40,6 +40,8 @@ const Sidebar = () => {
             <NavLink to="/masters/employee-type" className={({ isActive }) => isActive ? 'active' : ''}>Employee Type</NavLink>
             <NavLink to="/masters/document-type" className={({ isActive }) => isActive ? 'active' : ''}>Document Type</NavLink>
             <NavLink to="/masters/vendor-types" className={({ isActive }) => isActive ? 'active' : ''}> Vendor Type</NavLink>
+            <NavLink to="/masters/labor-skill-management" className={({ isActive }) => isActive ? 'active' : ''}>Labor Skills</NavLink>
+
           </div>
         </div>
         <NavLink to="/client" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>

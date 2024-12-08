@@ -5,6 +5,6 @@ class LaborManagementForm(forms.ModelForm):
     class Meta:
         model = LaborManagement
         fields = [
-            'name', 'phone_no', 'aadhar_no', 'emergency_contact_number',
+            'name', 'phone_no', 'skill', 'aadhar_no', 'emergency_contact_number',
             'address', 'city', 'state', 'pincode', 'daily_wages'
         ]

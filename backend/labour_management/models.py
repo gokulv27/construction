@@ -1,11 +1,10 @@
 from django.db import models
-
-
-
+from masters.models import LaborSkill
 
 class LaborManagement(models.Model):
     name = models.CharField(max_length=255, unique=True)
     phone_no = models.CharField(max_length=15, unique=True)
+    skill = models.ForeignKey(LaborSkill, on_delete=models.CASCADE)
     aadhar_no = models.CharField(max_length=12, unique=True)
     emergency_contact_number = models.CharField(max_length=15)
     address = models.TextField()

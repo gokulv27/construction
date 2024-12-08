@@ -1,11 +1,11 @@
-# masters/forms.py
 from django import forms
-from .models import EmployeeType,DocumentType,VendorType
+from .models import EmployeeType, DocumentType, VendorType, LaborSkill
 
 class EmployeeTypeForm(forms.ModelForm):
     class Meta:
         model = EmployeeType
         fields = ['name']
+
 
 class DocumentTypeForm(forms.ModelForm):
     class Meta:
@@ -13,27 +13,13 @@ class DocumentTypeForm(forms.ModelForm):
         fields = ['name']
 
 
-class VendortypeForm(forms.ModelForm):
+class LaborSkillForm(forms.ModelForm):
+    class Meta:
+        model = LaborSkill
+        fields = ['name']
+
+
+class VendorTypeForm(forms.ModelForm):
     class Meta:
         model = VendorType
         fields = ['name']
-
-# class BrandTypeForm(forms.ModelForm):
-#     class Meta:
-#         model = BrandType
-#         fields = ['name']
-
-        
-# class EmployeeRollesForm(forms.ModelForm):
-#     class Meta:
-#         model = EmployeeRolles
-#         fields = ['name']
-
-# class ItemForm(forms.ModelForm):
-#     class Meta:
-#         model = Item
-#         fields = ['name', 'brand']  # Include only the fields that should be editable
-#         widgets = {
-#             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter item name'}),
-#             'brand': forms.Select(attrs={'class': 'form-control'}),
-#         }
