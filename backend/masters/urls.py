@@ -21,8 +21,8 @@ urlpatterns = [
     path('api/vendor-types/<int:id>/delete/', views.vendor_type_delete, name='vendor_type_delete'), # DELETE: Delete a vendor type
 
     # Labor Skills
-    path('api/labor-skills/', views.labor_skill_list, name='labor_skill_list'),                     # GET: List all labor skills
-    path('api/labor-skills/create/', views.labor_skill_create, name='labor_skill_create'),          # POST: Create a labor skill
-    path('api/labor-skills/<int:id>/update/', views.labor_skill_update, name='labor_skill_update'), # PUT: Update a labor skill
-    path('api/labor-skills/<int:id>/delete/', views.labor_skill_delete, name='labor_skill_delete'), # DELETE: Delete a labor skill
+    path('api/skills/', views.labor_skill_list, name='labor_skill_list'),                  # GET: List all labor skills
+    path('api/skills/create/', views.labor_skill_create, name='labor_skill_create'),          # POST: Create a labor skill
+    path('api/skills/<int:id>/update/', views.labor_skill_update, name='labor_skill_update'), # PUT: Update a labor skill
+    path('api/skills/<int:id>/delete/', views.labor_skill_delete, name='labor_skill_delete'), # DELETE: Delete a labor skill
 ]

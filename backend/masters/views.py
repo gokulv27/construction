@@ -222,17 +222,9 @@ def vendor_type_delete(request, id):
 # GET: List all labor skills
 @api_view(['GET'])
 def labor_skill_list(request):
-    labor_skills = LaborSkill.objects.all()
-    data = [
-        {
-            'id': skill.id,
-            'name': skill.name,
-            'created_at': skill.created_at,
-            'updated_at': skill.updated_at
-        }
-        for skill in labor_skills
-    ]
-    return JsonResponse(data, safe=False)
+    skills = LaborSkill.objects.all()
+    serializer = LaborSkillSerializer(skills, many=True)
+    return Response(serializer.data)
 
 
 # POST: Create a new labor skill

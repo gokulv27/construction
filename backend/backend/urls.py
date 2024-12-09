@@ -6,4 +6,6 @@ urlpatterns = [
     path('masters/', include('masters.urls')),
     path('authentication/', include('authentication.urls')),
     path('labour_management/', include('labour_management.urls')), 
+    path('clients/', include('client.urls')), 
+    # path('project/', include('project.urls')), 
 ]

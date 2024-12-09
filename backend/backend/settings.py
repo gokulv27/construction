@@ -25,8 +25,10 @@ INSTALLED_APPS = [
     'corsheaders',  # Enable CORS headers
     'rest_framework',
     'masters',
+    # 'project',
     'authentication',
     'labour_management',
+    'client',
 ]
 
 PASSWORD_HASHERS = [
