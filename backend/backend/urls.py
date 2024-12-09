@@ -7,5 +7,5 @@ urlpatterns = [
     path('authentication/', include('authentication.urls')),
     path('labour_management/', include('labour_management.urls')), 
     path('clients/', include('client.urls')), 
-    # path('project/', include('project.urls')), 
+    path('project/', include('project.urls')), 
 ]

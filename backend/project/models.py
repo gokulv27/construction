@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils.timezone import now
-
+from client.models import Client
 class Project(models.Model):
-    client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='projects')  # Link to Client
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='projects')  # Link to Client
     project_name = models.CharField(max_length=200, unique=True)
     location = models.CharField(max_length=255)
     budget = models.DecimalField(max_digits=10, decimal_places=2)
