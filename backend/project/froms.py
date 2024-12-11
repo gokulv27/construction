@@ -22,3 +22,7 @@ class ProjectDocumentForm(forms.ModelForm):
         widgets = {
             'document_name': forms.TextInput(attrs={'class': 'form-control'}),
         }
+class LaborToProjectForm(forms.ModelForm):
+    class Meta:
+        model = LaborToProject
+        fields = ['labor', 'project', 'start_date', 'end_date']
