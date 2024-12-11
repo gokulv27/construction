@@ -40,6 +40,8 @@ const Sidebar = () => {
             <NavLink to="/masters/employee-type" className={({ isActive }) => isActive ? 'active' : ''}>Employee Type</NavLink>
             <NavLink to="/masters/document-type" className={({ isActive }) => isActive ? 'active' : ''}>Document Type</NavLink>
             <NavLink to="/masters/vendor-types" className={({ isActive }) => isActive ? 'active' : ''}> Vendor Type</NavLink>
+            <NavLink to="/masters/labor-skill-management" className={({ isActive }) => isActive ? 'active' : ''}>Labor Skills</NavLink>
+
           </div>
         </div>
         <NavLink to="/client" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
@@ -50,6 +52,34 @@ const Sidebar = () => {
           </svg>
           Client
         </NavLink>
+        {/* User Management NavLink */}
+      <NavLink
+        to="/masters/user-management"
+        className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        User Management
+      </NavLink>
+      <NavLink to="/Labor_management" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        Labor Management
+      </NavLink>
       </nav>
     </aside>
   );

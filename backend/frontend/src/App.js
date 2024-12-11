@@ -1,61 +1,48 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import EmployeeTypeManagement from './pages/EmployeeTypeManagement';
 import DocumentTypeManagement from './pages/DocumentTypeManagement';
-import  VendorTypesManagement from './pages/VendorTypesManagement';
-
+import VendorTypesManagement from './pages/VendorTypesManagement';
+import UserManagement from './pages/userManagement'; // Corrected capitalization
+import AddUser from './components/authentication/AddUser';
+import LaborManagement from './pages/LaborManagement';
+import LaborSkillManagement from './pages/LaborSkillManagement'; // Import Labor Skill Management
 import './App.css';
 
 function App() {
-  // Modal state to control visibility
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <Router>
       <div className="app">
-        {/* Sidebar and main content */}
         <div className="content-wrapper">
           <Sidebar />
           <main className="main-content">
             <div className="centered-container">
-              {/* All Routes must be inside this <Routes> component */}
               <Routes>
-                {/* Dashboard route */}
+                {/* Dashboard Route */}
                 <Route path="/" element={<Dashboard />} />
 
-                {/* Employee Type Management route */}
-                <Route
-                  path="/masters/employee-type"
-                  element={
-                    <EmployeeTypeManagement
-                      isModalOpen={isModalOpen}
-                      setIsModalOpen={setIsModalOpen}
-                    />
-                  }
-                />
+                {/* Employee Type Management Route */}
+                <Route path="/masters/employee-type" element={<EmployeeTypeManagement />} />
 
-                {/* Document Type Management route */}
-                <Route
-                  path="/masters/document-type"
-                  element={
-                    <DocumentTypeManagement
-                      isModalOpen={isModalOpen}
-                      setIsModalOpen={setIsModalOpen}
-                    />
-                  }
-                />
-                 {/* Document Type Management route */}
-                 <Route
-                  path="/masters/vendor-types"
-                  element={
-                    <VendorTypesManagement
-                      isModalOpen={isModalOpen}
-                      setIsModalOpen={setIsModalOpen}
-                    />
-                  }
-                />
+                {/* Document Type Management Route */}
+                <Route path="/masters/document-type" element={<DocumentTypeManagement />} />
+
+                {/* Vendor Types Management Route */}
+                <Route path="/masters/vendor-types" element={<VendorTypesManagement />} />
+
+                {/* User Management Route */}
+                <Route path="/masters/user-management" element={<UserManagement />} />
+
+                {/* Labor Skill Management Route */}
+                <Route path="/masters/labor-skill-management" element={<LaborSkillManagement />} />
+
+                {/* Add User Route */}
+                <Route path="/add-user" element={<AddUser />} />
+
+                {/* Labor Management Route */}
+                <Route path="/labor-management" element={<LaborManagement />} />
               </Routes>
             </div>
           </main>
