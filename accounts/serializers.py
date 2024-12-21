@@ -1,45 +1,73 @@
 from rest_framework import serializers
-from .models import CustomUser, OTP
-from .util import generate_otp, hash_otp
+from .models import CustomUser
+from django.contrib.auth.hashers import make_password
 
-class UserSerializer(serializers.ModelSerializer):
+
+class RegisterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user registration.
+    """
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'name', 'phone_number', 'role', 'status', 'created_at', 'updated_at']
+        fields = ['username', 'password', 'phone_number', 'name']
+        extra_kwargs = {'password': {'write_only': True}}
 
-class GenerateOTPSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
 
-    def validate_username(self, value):
-        try:
-            self.user = CustomUser.objects.get(username=value)
-        except CustomUser.DoesNotExist:
-            raise serializers.ValidationError("User does not exist.")
-        return value
 
-    def save(self, **kwargs):
-        raw_otp = generate_otp()
-        OTP.objects.create(user=self.user, otp=hash_otp(raw_otp))
-        return raw_otp
+class LoginSerializer(serializers.Serializer):
+    """
+    Serializer for user login.
+    """
+    username = serializers.CharField(max_length=150)
+    password = serializers.CharField(write_only=True)
 
-class ResetPasswordSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    otp = serializers.CharField()
+    def validate(self, data):
+        from django.contrib.auth import authenticate
+        user = authenticate(username=data['username'], password=data['password'])
+        if not user:
+            raise serializers.ValidationError("Invalid username or password.")
+        if not user.is_active:
+            raise serializers.ValidationError("User account is inactive.")
+        if user.new_login:
+            raise serializers.ValidationError(
+                "Password reset required before proceeding."
+            )
+        return {
+            "user_id": user.id,
+            "username": user.username,
+        }
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    """
+    Serializer for password reset.
+    """
+    username = serializers.CharField(max_length=150)
     new_password = serializers.CharField(write_only=True)
 
     def validate(self, data):
         try:
             user = CustomUser.objects.get(username=data['username'])
-            otp_instance = OTP.objects.filter(user=user).latest('created_at')
-        except (CustomUser.DoesNotExist, OTP.DoesNotExist):
-            raise serializers.ValidationError("Invalid username or OTP.")
-
-        if not otp_instance.is_valid() or otp_instance.otp != hash_otp(data['otp']):
-            raise serializers.ValidationError("Invalid or expired OTP.")
-
-        self.user = user
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError("User does not exist.")
         return data
 
-    def save(self, **kwargs):
-        self.user.set_password(self.validated_data['new_password'])
-        self.user.save()
+    def save(self):
+        validated_data = self.validated_data
+        user = CustomUser.objects.get(username=validated_data['username'])
+        user.set_password(validated_data['new_password'])
+        user.new_login = False  # Mark password reset complete
+        user.save()
+        return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer to retrieve user information.
+    """
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'phone_number', 'name', 'created_at', 'updated_at']

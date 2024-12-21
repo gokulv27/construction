@@ -1,6 +1,7 @@
 from django import forms
-from .models import Project, Document
+from .models import LaborToProject,Project, Document
 
+# Project Form
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
@@ -14,7 +15,7 @@ class ProjectForm(forms.ModelForm):
             'budget': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
-
+# Document Form
 class ProjectDocumentForm(forms.ModelForm):
     class Meta:
         model = Document
@@ -22,3 +23,14 @@ class ProjectDocumentForm(forms.ModelForm):
         widgets = {
             'document_name': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+# LaborToProject Form
+class LaborToProjectForm(forms.ModelForm):
+    class Meta:
+        model = LaborToProject
+        fields = ['labor', 'project', 'start_date', 'end_date']
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
